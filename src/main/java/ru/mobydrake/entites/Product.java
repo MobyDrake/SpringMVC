@@ -1,8 +1,19 @@
 package ru.mobydrake.entites;
 
+
+import javax.persistence.*;
+import java.util.List;
+
+@Entity
+@Table(name ="product_tbl")
 public class Product {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
+    @Column(name = "title")
     private String title;
+    @Column(name = "price")
     private double cost;
 
     public Product() {
@@ -13,6 +24,15 @@ public class Product {
         this.title = title;
         this.cost = cost;
     }
+
+    @ManyToMany
+    @JoinTable(
+            name = "product_buyer", // название таблицы
+            joinColumns = @JoinColumn(name = "product_id"),  // то что связываем
+            inverseJoinColumns = @JoinColumn(name = "person_id") // то на что связываем
+    )
+    private List<Product> buyers;
+
 
     public void setId(int id) {
         this.id = id;
@@ -36,5 +56,10 @@ public class Product {
 
     public double getCost() {
         return cost;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" + "id=" + id + ", title='" + title + '\'' + ", cost=" + cost + '}';
     }
 }
